@@ -35,8 +35,6 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
     // delay
     const debounceRequest = useCallback(() => {
         request();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const {
@@ -48,6 +46,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
         queryFn: async () => {
             if (!input) return [];
             const { data } = await axios.get(`/api/search?q=${input}`);
+            console.log(data);
             return data as (Subreddit & {
                 _count: Prisma.SubredditCountOutputType;
             })[];
@@ -78,9 +77,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
 
             {input.length > 0 && (
                 <CommandList className="absolute bg-white top-full inset-x-0 shadow rounded-b-md">
-                    {isFetched && (
-                        <CommandEmpty>No results found.</CommandEmpty>
-                    )}
+                    {isFetched && <CommandEmpty>No results found.</CommandEmpty>}
                     {(queryResults?.length ?? 0) > 0 ? (
                         <CommandGroup heading="Communities">
                             {queryResults?.map((subreddit) => (
@@ -93,9 +90,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
                                     value={subreddit.name}
                                 >
                                     <Users className="mr-2 h-4 w-4" />
-                                    <a href={`/d/${subreddit.name}`}>
-                                        d/{subreddit.name}
-                                    </a>
+                                    <a href={`/d/${subreddit.name}`}>d/{subreddit.name}</a>
                                 </CommandItem>
                             ))}
                         </CommandGroup>
